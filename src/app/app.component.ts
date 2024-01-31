@@ -7,4 +7,16 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'mean-course';
+
+  posts:postData[]=[];
+
+  postData(posts:postData){
+    this.posts.push(posts);
+
+  }
+}
+
+interface postData{
+  title:string,
+  content:string
 }
