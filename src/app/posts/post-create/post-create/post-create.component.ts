@@ -13,6 +13,7 @@ export class PostCreateComponent {
 
   onAddPost(postForm:NgForm){
     this.postSer.addPost(postForm.value.title,postForm.value.content);
+    postForm.reset();
     
   }
 }

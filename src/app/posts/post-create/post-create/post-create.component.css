@@ -1,4 +1,6 @@
-
+mat-card{
+    margin-top: 20px;
+}
 mat-card button{
     width:25%;
     margin-left:10px;
