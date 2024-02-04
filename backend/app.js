@@ -2,7 +2,18 @@ const express = require('express')
 
 const app =express();
 app.use((req,res,next)=>{
-    console.log("first middle ware");
+    //basic middle ware
+    // console.log("first middle ware");
+    // next();
+
+    //for cors error
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept");
+    res.setHeader(
+        "Access-Control-Allow-Methods",
+        "GET, POST, PATCH, DELETE, OPTIONS"
+    );
     next();
 });
 
