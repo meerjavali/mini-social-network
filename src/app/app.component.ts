@@ -7,13 +7,6 @@ import { Post } from './posts/post.model';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'mean-course';
-
-  posts:Post[]=[];
-
-  postData(posts:Post){
-    this.posts.push(posts);
-
-  }
+ 
 }
 
