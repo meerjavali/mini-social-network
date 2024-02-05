@@ -1,6 +1,11 @@
+const bodyParser = require('body-parser');
 const express = require('express')
 
 const app =express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:false}));
+
 app.use((req,res,next)=>{
     //basic middle ware
     // console.log("first middle ware");
@@ -16,6 +21,15 @@ app.use((req,res,next)=>{
     );
     next();
 });
+
+app.post("/api/posts", (req,res,next)=>{
+const post = req.body;
+console.log(post);
+res.status(201).json({
+message: 'Post added Successfully!'
+});
+
+})
 
 app.use("/api/posts",(req,res,next)=>{
     const posts = [
