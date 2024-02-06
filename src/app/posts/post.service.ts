@@ -16,7 +16,7 @@ export class PostService {
     return this.postsUpdated.asObservable();
   }
   
-
+  //sdgx8btyLMarGZKi
   addPost(title:string,content:string){
     const postData: Post ={id:'', title:title,content:content};
     
