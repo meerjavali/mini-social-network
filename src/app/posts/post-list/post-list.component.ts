@@ -28,6 +28,10 @@ export class PostListComponent implements OnInit{
 
   }
 
+  onDelete(postid:string){
+    this.postSer.deletePost(postid);
+  }
+
 
 }
 
