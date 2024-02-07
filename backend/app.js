@@ -39,11 +39,15 @@ const post = new Post({
     title:req.body.title,
     content:req.body.content
 });
-post.save();
-console.log(post);
-res.status(201).json({
-message: 'Post added Successfully!'
-});
+post.save().then(result=>{
+    const id = result._id;
+    res.status(201).json({
+        message: 'Post added Successfully!',
+        postId: id
+        });
+})
+
+
 
 })
 
