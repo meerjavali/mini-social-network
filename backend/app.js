@@ -74,6 +74,7 @@ app.delete("/api/posts/:id",(req,res,next)=>{
 });
 
 app.put("/api/posts/:id", (req,res, next)=>{
+    //dont add new here 
     const post = ({
         title: req.body.title,
         content: req.body.content,
