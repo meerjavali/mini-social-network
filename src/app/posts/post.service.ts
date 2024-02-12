@@ -17,7 +17,7 @@ export class PostService {
   }
   
   //sdgx8btyLMarGZKi
-  addPost(title:string,content:string){
+  addPost( title:string,content:string){
     const postData: Post ={id:"", title:title,content:content};
     
     this.http.post<{message:string, postId:String}>("http://localhost:3000/api/posts", postData).subscribe((responseData)=>{
@@ -29,6 +29,18 @@ export class PostService {
 
     });
     
+  }
+
+  updatePost(id:string, title:string, content:string){
+    this.http.put<{message:string}>("http://localhost:3000/api/posts/"+id, { title:title, content:content})
+    .subscribe((responseData)=>{
+      console.log(responseData.message);
+    })
+
+  }
+  getPost(postId:string){
+   return {...this.posts.find(p=> p.id == postId)};
+
   }
   getPosts(){
     // return [...this.posts];
@@ -45,8 +57,7 @@ export class PostService {
     }))
     .subscribe((transformedPosts)=>{
       this.posts= transformedPosts;
-      console.log(transformedPosts);
-      console.log(this.posts);
+      console.log("this is post list ",transformedPosts);
       this.postsUpdated.next([...this.posts]);
 
     });

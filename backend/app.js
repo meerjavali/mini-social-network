@@ -28,10 +28,11 @@ app.use((req,res,next)=>{
     "Origin, X-Requested-With, Content-Type, Accept");
     res.setHeader(
         "Access-Control-Allow-Methods",
-        "GET, POST, PATCH, DELETE, OPTIONS"
+        "GET, POST, PATCH, PUT, DELETE, OPTIONS"
     );
     next();
 });
+
 
 //post call
 app.post("/api/posts", (req,res,next)=>{
@@ -41,6 +42,7 @@ const post = new Post({
 });
 post.save().then(result=>{
     const id = result._id;
+    console.log(result);
     res.status(201).json({
         message: 'Post added Successfully!',
         postId: id
@@ -69,5 +71,20 @@ app.delete("/api/posts/:id",(req,res,next)=>{
 
         res.status(200).json({message:"post deleted"});
     });
-})
+});
+
+app.put("/api/posts/:id", (req,res, next)=>{
+    const post = ({
+        title: req.body.title,
+        content: req.body.content,
+    });
+    console.log("meer the id is ", req.params.id);
+    Post.updateOne({ _id:req.params.id },post).then(result=>{
+        console.log(result);
+        res.status(200).json({
+            message: 'Post updated  Successfully!',
+            });
+    })
+
+});
 module.exports = app;
