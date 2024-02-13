@@ -10,3 +10,6 @@ mat-card button{
 mat-form-field{
     display: block;
 }
+mat-spinner{
+    margin:auto;
+}

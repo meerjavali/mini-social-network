@@ -5,3 +5,7 @@
 :host{
     margin-top:16px;
 }
+
+mat-spinner{
+    margin: auto;
+}

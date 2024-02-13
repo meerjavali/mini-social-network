@@ -14,11 +14,13 @@ export class PostListComponent implements OnInit{
   //   {title:"second post", content:"the second post\'s content"},
   //   {title:"third post", content:"the third post\'s content"}
   // ];
-
+  isLoading=false;
   posts:Post[]=[];
   ngOnInit(): void {
+    this.isLoading=true;
     this.postSer.getPosts();
     this.postSer.getPostsListener().subscribe((posts:Post[])=>{
+      this.isLoading=false;
       this.posts=posts;
 
     });
