@@ -39,7 +39,10 @@ export class PostService {
 
   }
   getPost(postId:string){
-   return {...this.posts.find(p=> p.id == postId)};
+    //we will get the post from mongo db not from local 
+   //return {...this.posts.find(p=> p.id == postId)};
+
+   return this.http.get<{_id:string, title:string, content:string}>("http://localhost:3000/api/posts/"+postId);
 
   }
   getPosts(){

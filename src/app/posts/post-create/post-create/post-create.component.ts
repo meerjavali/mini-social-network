@@ -21,7 +21,10 @@ export class PostCreateComponent {
         this.postId= params['id'];
         this.mode="edit";
         console.log("this is inside route params meer edit mode");
-        this.post = this.postSer.getPost(this.postId);
+        this.postSer.getPost(this.postId).subscribe((post)=>{
+          this.post = {id:post._id, title:post.title, content:post.content}
+         
+        })
 
       }
       else{

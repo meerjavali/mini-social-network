@@ -21,11 +21,13 @@ const normalizePort = val => {
 
   if (isNaN(port)) {
     // named pipe
+    console.log("please check this named pipe "+isNaN(port));
     return val;
   }
 
   if (port >= 0) {
     // port number
+    console.log("please check this port number "+port);
     return port;
   }
 
