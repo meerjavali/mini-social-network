@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PostService } from '../../post.service';
 import { ActivatedRoute } from '@angular/router';
 import { Post } from '../../post.model';
+
 
 import { Router } from '@angular/router'
 
@@ -11,12 +12,22 @@ import { Router } from '@angular/router'
   templateUrl: './post-create.component.html',
   styleUrls: ['./post-create.component.css']
 })
-export class PostCreateComponent {
+export class PostCreateComponent implements OnInit {
 
   postId="";
   post:Post;
   mode="create";
   isLoading=false;
+  form:FormGroup;
+ 
+  ngOnInit(): void {
+    this.form = new FormGroup({
+      title : new FormControl(null, {validators:[Validators.required]}),
+      content : new FormControl(null, {validators:[Validators.required]})
+    })
+    
+  }
+
   constructor(private postSer:PostService, private route:ActivatedRoute, private router:Router){
     this.route.params.subscribe((params)=>{
       
@@ -28,6 +39,7 @@ export class PostCreateComponent {
         this.postSer.getPost(this.postId).subscribe((post)=>{
           this.isLoading=false;
           this.post = {id:post._id, title:post.title, content:post.content}
+          this.form.setValue({title:this.post.title,content:this.post.content});
          
         })
 
@@ -45,17 +57,17 @@ export class PostCreateComponent {
     });
   }
 
-  onAddPost(postForm:NgForm){
+  onAddPost(){
     if(this.mode==="edit"){
-      this.postSer.updatePost( this.postId,postForm.value.title,postForm.value.content);
+      this.postSer.updatePost( this.postId,this.form.value.title,this.form.value.content);
       
-      postForm.resetForm();
+      this.form.reset();
       this.router.navigate(["/"]);
 
     }
     if(this.mode==="create"){
-      this.postSer.addPost( postForm.value.title,postForm.value.content);
-      postForm.resetForm();
+      this.postSer.addPost( this.form.value.title,this.form.value.content);
+      this.form.reset();
       this.router.navigate(["/"]);
     }
     

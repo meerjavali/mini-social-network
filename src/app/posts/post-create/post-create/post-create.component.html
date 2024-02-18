@@ -1,23 +1,27 @@
 <mat-card>
     <mat-spinner *ngIf="isLoading"></mat-spinner>
-    <form (submit)="onAddPost(postForm)" #postForm="ngForm" *ngIf="!isLoading">
+    <form  [formGroup]="form" (submit)="onAddPost()"  *ngIf="!isLoading">
         <mat-form-field>
-            <input type="text" matInput [ngModel]="post?.title" name="title" placeholder="title" required  #titleName="ngModel">
-            <mat-error *ngIf="titleName.invalid && titleName.touched">Please Enter a valid title</mat-error>
+            <input type="text" matInput  formControlName="title"  name="title" placeholder="title"  >
+            <mat-error *ngIf="form.get('title').invalid && form.get('title').touched">Please Enter a valid title</mat-error>
         </mat-form-field>
+        <div>
+            <button mat-stroked-button type="button" color="primary" (click)="filePicker.click()">Pick Up Image</button>
+            <input type="file" #filePicker />
+        </div>
         <mat-form-field>
-            <textarea matInput rows="6" [ngModel]="post?.content" name="content" placeholder="content" required  #contentName="ngModel"></textarea>
-            <mat-error *ngIf="contentName.invalid && contentName.touched">Please Enter a valid content</mat-error>
+            <textarea matInput rows="6"  formControlName="content" name="content" placeholder="content"  ></textarea>
+            <mat-error *ngIf="form.get('content').invalid && form.get('content').touched">Please Enter a valid content</mat-error>
             
         </mat-form-field>
         <button  *ngIf="mode==='create'"
             mat-raised-button 
             color="primary"
-            type="submit" [disabled]="!postForm.valid">save post</button>
+            type="submit" [disabled]="!form.valid">save post</button>
             <button  *ngIf="mode==='edit'"
             mat-raised-button 
             color="primary"
-            type="submit" [disabled]="!postForm.valid">update post</button>
+            type="submit" [disabled]="!form.valid">update post</button>
     </form>
 
 </mat-card>
