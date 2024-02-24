@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PostService } from '../../post.service';
 import { ActivatedRoute } from '@angular/router';
 import { Post } from '../../post.model';
+import { mimeType } from '../mime-type.validator';
 
 
 import { Router } from '@angular/router'
@@ -19,11 +20,13 @@ export class PostCreateComponent implements OnInit {
   mode="create";
   isLoading=false;
   form:FormGroup;
+  imagePreview:string;
  
   ngOnInit(): void {
     this.form = new FormGroup({
       title : new FormControl(null, {validators:[Validators.required]}),
-      content : new FormControl(null, {validators:[Validators.required]})
+      content : new FormControl(null, {validators:[Validators.required]}),
+      image : new FormControl(null, {validators:[Validators.required], asyncValidators:mimeType})
     })
     
   }
@@ -38,8 +41,13 @@ export class PostCreateComponent implements OnInit {
         console.log("this is inside route params meer edit mode");
         this.postSer.getPost(this.postId).subscribe((post)=>{
           this.isLoading=false;
-          this.post = {id:post._id, title:post.title, content:post.content}
-          this.form.setValue({title:this.post.title,content:this.post.content});
+          this.post = {
+            id:post._id, 
+            title:post.title, 
+            content:post.content,
+            imagePath: post.imagePath
+          }
+          this.form.setValue({title:this.post.title,content:this.post.content, image: this.post.imagePath});
          
         })
 
@@ -59,18 +67,44 @@ export class PostCreateComponent implements OnInit {
 
   onAddPost(){
     if(this.mode==="edit"){
-      this.postSer.updatePost( this.postId,this.form.value.title,this.form.value.content);
-      
-      this.form.reset();
+      this.postSer.updatePost( this.postId,this.form.value.title,this.form.value.content, this.form.value.image).subscribe((responseData)=>{
+        
+        console.log(responseData.message);
+        this.form.reset();
       this.router.navigate(["/"]);
+      })
+      
+      
 
     }
     if(this.mode==="create"){
-      this.postSer.addPost( this.form.value.title,this.form.value.content);
-      this.form.reset();
-      this.router.navigate(["/"]);
+      console.log(this.form.value.title,this.form.value.content, this.form.value.image);
+      this.postSer.addPost( this.form.value.title,this.form.value.content, this.form.value.image).subscribe((responseData)=>{
+        console.log(responseData.message);
+        this.form.reset();
+        this.router.navigate(["/"]);
+      })
+      
     }
     
     
+  }
+
+  onImagePicked(event: Event){
+    const file = (event.target as HTMLInputElement).files[0];
+    this.form.patchValue({image:file});
+    this.form.get('image').updateValueAndValidity();
+    // console.log(this.form);
+    // console.log(file);
+
+    // image preview logic start
+    const reader = new FileReader();
+    reader.onload = () =>{
+      this.imagePreview = reader.result as string;
+    }
+    
+    reader.readAsDataURL(file);
+    //image preview logic ends
+
   }
 }

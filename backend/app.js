@@ -1,3 +1,4 @@
+const path = require('path')
 const bodyParser = require('body-parser');
 const express = require('express')
 const postRoutes = require('../backend/router/posts');
@@ -7,6 +8,7 @@ const app =express();
 //bodyparser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
+app.use("/images", express.static(path.join("backend/images")));
 
 //mongoose connection
 
