@@ -76,6 +76,7 @@ router.post("", multer({storage:storage}).single('image'), (req,res,next)=>{
         }
         postQuery.then((documents)=>{
             fetchedPosts =documents;
+            //Post.count(); updated countDoucments()
             return Post.countDocuments()
             }).then((count)=>{
                 res.status(200).json({
