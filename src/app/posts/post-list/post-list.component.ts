@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Post } from '../post.model'
 import { PostService } from '../post.service';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-post-list',
@@ -16,12 +17,17 @@ export class PostListComponent implements OnInit{
   // ];
   isLoading=false;
   posts:Post[]=[];
+  totalposts;
+  pageSizeOptions=[1,2,5,10];
+  currentPage=1;
+  pageSize=2;
   ngOnInit(): void {
     this.isLoading=true;
-    this.postSer.getPosts();
-    this.postSer.getPostsListener().subscribe((posts:Post[])=>{
+    this.postSer.getPosts(this.pageSize, this.currentPage);
+    this.postSer.getPostsListener().subscribe((postData:{posts:Post[],postCount:number})=>{
       this.isLoading=false;
-      this.posts=posts;
+      this.posts=postData.posts;
+      this.totalposts = postData.postCount;
 
     });
   }
@@ -30,8 +36,20 @@ export class PostListComponent implements OnInit{
 
   }
 
+  onChangePage(pageData: PageEvent){
+    this.isLoading=true;
+    this.currentPage = pageData.pageIndex +1;
+    this.pageSize = pageData.pageSize;
+    this.postSer.getPosts(this.pageSize, this.currentPage);
+    
+
+  }
+
   onDelete(postid:string){
-    this.postSer.deletePost(postid);
+    this.isLoading=true;
+    this.postSer.deletePost(postid).subscribe(()=>{
+      this.postSer.getPosts(this.pageSize, this.currentPage);
+    })
   }
 
 

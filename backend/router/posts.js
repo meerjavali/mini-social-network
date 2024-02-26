@@ -64,12 +64,26 @@ router.post("", multer({storage:storage}).single('image'), (req,res,next)=>{
     
     //get call
     router.get("",(req,res,next)=>{
-        Post.find().then((documents)=>{
-            res.status(200).json({
-                message: 'post fetched successfully!',
-                posts:documents
-               })
-            });
+        const pageSize = +req.query.postSize;
+        const page = +req.query.page;
+        console.log("page sisze "+pageSize+" page "+page);
+        const postQuery = Post.find();
+        let fetchedPosts ;
+        if(pageSize && page ){
+            postQuery
+            .skip(pageSize * (page-1))
+            .limit(pageSize);
+        }
+        postQuery.then((documents)=>{
+            fetchedPosts =documents;
+            return Post.countDocuments()
+            }).then((count)=>{
+                res.status(200).json({
+                    message: 'post fetched successfully!',
+                    posts:fetchedPosts,
+                    maxPosts: count
+                   })
+            })
     
         });
        // res.send("hellow from second middle ware");
