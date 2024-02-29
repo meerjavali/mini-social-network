@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { AuthService } from '../auth.service';
+import { Auth } from '../auth.model';
 
 @Component({
   selector: 'app-signup',
@@ -8,9 +10,15 @@ import { NgForm } from '@angular/forms';
 })
 export class SignupComponent {
   isLoading = false;
+  authData: Auth;
+  constructor(private auth : AuthService){}
 
   submitForm(signUpForm:NgForm){
-    console.log(signUpForm.value);
+    if(signUpForm.invalid){
+      return;
+    }
+    this.auth.updateUser(this.authData= {email: signUpForm.value.email, password:signUpForm.value.password});
+
 
   }
 
