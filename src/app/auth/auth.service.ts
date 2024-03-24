@@ -9,6 +9,7 @@ import { Subject } from 'rxjs';
 })
 export class AuthService {
   private token:string;
+  private userAuthenticated =false;
   private authListener = new Subject<boolean>();
   constructor(private http: HttpClient) { }
 
@@ -18,6 +19,9 @@ export class AuthService {
 
   public getAuthListener(){
     return this.authListener.asObservable();
+  }
+  public getAuth(){
+    return this.userAuthenticated;
   }
 
   updateUser(auth: Auth){
@@ -34,7 +38,12 @@ export class AuthService {
         console.log(res.token);
         this.token = res.token;
         //sending login status to ui
-        this.authListener.next(true);
+        if(this.token){
+          this.userAuthenticated = true;
+          this.authListener.next(true);
+
+        }
+        
       });
 
   }
