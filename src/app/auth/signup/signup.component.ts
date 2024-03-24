@@ -17,6 +17,7 @@ export class SignupComponent {
     if(signUpForm.invalid){
       return;
     }
+    this.isLoading=true;
     this.auth.updateUser(this.authData= {email: signUpForm.value.email, password:signUpForm.value.password});
 
 

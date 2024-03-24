@@ -14,7 +14,7 @@
         <button  
             mat-raised-button 
             color="primary"
-            type="submit" [disabled]="signUpForm.invalid">Sign Up</button>
+            type="submit" [disabled]="signUpForm.invalid" *ngIf="!isLoading" >Sign Up</button>
             
     </form>
 

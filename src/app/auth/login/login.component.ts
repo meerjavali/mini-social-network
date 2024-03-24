@@ -14,6 +14,7 @@ export class LoginComponent {
   constructor(private authService:AuthService){}
 
   submitForm(loginForm:NgForm){ 
+    this.isLoading=true;
   this.authService.loginUser(this.authData= {email: loginForm.value.email, password:loginForm.value.password})
   }
 
