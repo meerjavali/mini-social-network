@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Auth } from './auth.model';
+import { Subject } from 'rxjs';
 
 
 @Injectable({
@@ -8,10 +9,15 @@ import { Auth } from './auth.model';
 })
 export class AuthService {
   private token:string;
+  private authListener = new Subject<boolean>();
   constructor(private http: HttpClient) { }
 
   public getToken(){
     return this.token;
+  }
+
+  public getAuthListener(){
+    return this.authListener.asObservable();
   }
 
   updateUser(auth: Auth){
@@ -27,6 +33,8 @@ export class AuthService {
       .subscribe(res=>{
         console.log(res.token);
         this.token = res.token;
+        //sending login status to ui
+        this.authListener.next(true);
       });
 
   }
