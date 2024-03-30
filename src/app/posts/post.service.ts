@@ -57,7 +57,8 @@ export class PostService {
         id: id,
         title: title,
         content: content,
-        imagePath: image
+        imagePath: image,
+        creator: ''
       }
 
     }
@@ -69,7 +70,7 @@ export class PostService {
     //we will get the post from mongo db not from local 
    //return {...this.posts.find(p=> p.id == postId)};
  console.log("check meer in get post");
-   return this.http.get<{_id:string, title:string, content:string, imagePath:string}>("http://localhost:3000/api/posts/"+postId);
+   return this.http.get<{_id:string, title:string, content:string, imagePath:string, creator: string}>("http://localhost:3000/api/posts/"+postId);
 
   }
   getPosts(pageSize:number , page:number){
@@ -79,12 +80,13 @@ export class PostService {
     this.http.get<{message:string, posts:any, maxPosts:number}>("http://localhost:3000/api/posts?"+queryParams)
     .pipe(map((postData)=>{
       // lecture 91 to understand this
-      return { posts: postData.posts.map((post: { title: any; _id: any; content: any, imagePath:string })=>{
+      return { posts: postData.posts.map((post: { title: any; _id: any; content: any, imagePath:string, creator:string })=>{
         return {
           title:post.title,
           id:post._id,
           content:post.content,
-          imagePath: post.imagePath
+          imagePath: post.imagePath,
+          creator: post.creator
         }
       }),
       maxPosts:postData.maxPosts
@@ -92,6 +94,7 @@ export class PostService {
     }))
     .subscribe((transformedPostData)=>{
       this.posts= transformedPostData.posts;
+      console.log(this.posts);
       //console.log("this is post list ",transformedPostData);
       this.postsUpdated.next({
         posts:[...this.posts], 

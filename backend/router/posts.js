@@ -30,11 +30,11 @@ const storage = multer.diskStorage({
 //post call
 router.post("", checkAuth, multer({storage:storage}).single('image'), (req,res,next)=>{
     const url = req.protocol + '://' + req.get("host");
-    console.log("here in post call", req);
     const post = new Post({
         title:req.body.title,
         content:req.body.content,
-        imagePath: url + "/images/"+ req.file.filename
+        imagePath: url + "/images/"+ req.file.filename,
+        creator: req.userData.userId // here we are using the userid decoded from the token in checkAuth middle ware
     });
     post.save().then(result=>{
         const id = result._id;
@@ -91,11 +91,18 @@ router.post("", checkAuth, multer({storage:storage}).single('image'), (req,res,n
        // res.send("hellow from second middle ware");
        
     router.delete("/:id", checkAuth, (req,res,next)=>{
-        Post.deleteOne({_id:req.params.id}).then((result)=>{
+        Post.deleteOne({_id:req.params.id, creator:req.userData.userId}).then((result)=>{
             console.log(result);
+            if(result.deletedCount > 0){
+                res.status(200).json({message:"post deleted"});
+            }{
+                res.status(401).json({message:"not authorized user"})
+            }
     
-            res.status(200).json({message:"post deleted"});
-        });
+            
+        }).catch(err=>{
+            console.log("error in delete",err);
+        })
     });
     
     router.put("/:id", checkAuth, multer({storage:storage}).single('image'), (req,res, next)=>{
@@ -110,15 +117,21 @@ router.post("", checkAuth, multer({storage:storage}).single('image'), (req,res,n
         const post = ({
             title: req.body.title,
             content: req.body.content,
-            imagePath: imagePath
+            imagePath: imagePath,
+            creator: req.userData.userId
         });
         console.log("meer the id is ", req.params.id);
         console.log(" the update imag ", imagePath);
-        Post.updateOne({ _id:req.params.id },post).then(result=>{
+        Post.updateOne({ _id:req.params.id, creator:req.userData.userId },post).then(result=>{
             console.log(result);
-            res.status(200).json({
-                message: 'Post updated  Successfully!',
-                });
+            if(result.modifiedCount > 0){
+                res.status(200).json({message:"post deleted"});
+
+            }{
+                res.status(401).json({message:"not authorized user"})
+            }
+        }).catch(err=>{
+            console.log("error in update",err);
         })
     
     });

@@ -22,6 +22,7 @@ export class PostListComponent implements OnInit, OnDestroy{
   isLoading=false;
   posts:Post[]=[];
   totalposts;
+  userId:string;
   pageSizeOptions=[1,2,5,10];
   currentPage=1;
   pageSize=2;
@@ -35,8 +36,10 @@ export class PostListComponent implements OnInit, OnDestroy{
 
     });
     this.userAuthenticated = this.authSer.getAuth();
+    this.userId = this.authSer.getUserId();
     this.authStatusSub = this.authSer.getAuthListener().subscribe(Authenticated=>{
       this.userAuthenticated = Authenticated;
+      this.userId = this.authSer.getUserId();
     })
   }
 
