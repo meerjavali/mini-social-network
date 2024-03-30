@@ -69,6 +69,7 @@ router.post('/login',(req,res,next)=>{
     })
     .catch(err=>{
         console.log(err);
+        console.log("when invalid credentials given");
         res.status(401).json({
             message: 'Auth Failed'
         });

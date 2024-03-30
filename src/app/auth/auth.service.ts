@@ -50,8 +50,11 @@ export class AuthService {
       .subscribe(res=>{
         console.log(res);
         this.router.navigate(['/']);
-        
-      });
+        },
+         error=>{
+        this.authListener.next(false);
+       }
+    );
 
   }
 
@@ -79,7 +82,10 @@ export class AuthService {
 
         }
         this.router.navigate(['/']);
-      });
+      },error=>{
+        this.authListener.next(false);
+      }
+      );
 
   }
 
