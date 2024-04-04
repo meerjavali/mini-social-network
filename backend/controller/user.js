@@ -43,6 +43,7 @@ exports.userLogin = (req,res,next)=>{
 
         }
         fetchedUser =user;
+        console.log("user password",user.password);
         return bcrypt.compare(req.body.password, user.password);   
     })
     .then(result=>{
