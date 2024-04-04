@@ -91,7 +91,7 @@ exports.updatePost = (req,res, next)=>{
         });
         Post.updateOne({ _id:req.params.id, creator:req.userData.userId },post).then(result=>{
             console.log(result);
-            if(result.modifiedCount > 0){
+            if(result.matchedCount > 0){
                 console.log("check the response ",res);
                 res.status(200).json({message:"post modified!!"});
                 console.log("sent modifed message!!");

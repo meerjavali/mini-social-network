@@ -1,15 +1,13 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
-import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { AngularMaterialModule } from './angular-material.module';
 
 
-import { PostListComponent } from './posts/post-list/post-list.component';
-import { PostCreateComponent } from './posts/post-create/post-create/post-create.component';
+
 import { HeaderComponent } from './header/header/header.component';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
@@ -17,14 +15,13 @@ import { SignupComponent } from './auth/signup/signup.component';
 import { AuthInterceptor } from './auth/auth-interceptor.service';
 import { ErrorInterceptor } from './error-interceptor.service';
 import { ErrorComponent } from './error/error.component';
+import { PostModule } from './posts/post.module';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    PostCreateComponent,
     HeaderComponent,
-    PostListComponent,
     LoginComponent,
     SignupComponent,
     ErrorComponent
@@ -35,7 +32,7 @@ import { ErrorComponent } from './error/error.component';
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    ReactiveFormsModule,
+    PostModule,
     AngularMaterialModule// instead of all the material modules we can use only one angular material module
     
   ],
