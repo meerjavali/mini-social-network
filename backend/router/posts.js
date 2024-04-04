@@ -1,8 +1,8 @@
 const express = require('express');
 const multer = require('multer');
-const Post = require('../models/post')
 const router = express.Router();
 const checkAuth = require('../middleware/checkAuth');
+const postController = require('../controller/posts')
 
 
 const MIME_TYPE = {
@@ -28,112 +28,19 @@ const storage = multer.diskStorage({
 });
 
 //post call
-router.post("", checkAuth, multer({storage:storage}).single('image'), (req,res,next)=>{
-    const url = req.protocol + '://' + req.get("host");
-    const post = new Post({
-        title:req.body.title,
-        content:req.body.content,
-        imagePath: url + "/images/"+ req.file.filename,
-        creator: req.userData.userId // here we are using the userid decoded from the token in checkAuth middle ware
-    });
-    post.save().then(result=>{
-        const id = result._id;
-        console.log(result);
-        res.status(201).json({
-            message: 'Post added Successfully!',
-            post:{
-                ...result,
-                id: result._id
-            }
-            });
-    })        
-    });
+router.post("", checkAuth, multer({storage:storage}).single('image'), postController.createPost );
     
     
     //get post by id
     
-    router.get("/:id",(req,res,next)=>{
-        Post.findById(req.params.id).then((post)=>{
-            if(post){
-                res.status(200).json(post);
-            }
-            else{
-                res.status(404).json({message:'post not Found!'});
-            }
-        })
-    })
+router.get("/:id", postController.getPostById );
     
     //get call
-    router.get("",(req,res,next)=>{
-        const pageSize = +req.query.postSize;
-        const page = +req.query.page;
-        console.log("page sisze "+pageSize+" page "+page);
-        const postQuery = Post.find();
-        let fetchedPosts ;
-        if(pageSize && page ){
-            postQuery
-            .skip(pageSize * (page-1))
-            .limit(pageSize);
-        }
-        postQuery.then((documents)=>{
-            fetchedPosts =documents;
-            //Post.count(); updated countDoucments()
-            return Post.countDocuments()
-            }).then((count)=>{
-                res.status(200).json({
-                    message: 'post fetched successfully!',
-                    posts:fetchedPosts,
-                    maxPosts: count
-                   })
-            })
-    
-        });
+router.get("", postController.getPosts);
        // res.send("hellow from second middle ware");
        
-    router.delete("/:id", checkAuth, (req,res,next)=>{
-        Post.deleteOne({_id:req.params.id, creator:req.userData.userId}).then((result)=>{
-            console.log(result);
-            if(result.deletedCount > 0){
-                res.status(200).json({message:"post deleted"});
-            }{
-                res.status(401).json({message:"not authorized user"})
-            }
+router.delete("/:id", checkAuth, postController.deletePost);
     
-            
-        }).catch(err=>{
-            console.log("error in delete",err);
-        })
-    });
-    
-    router.put("/:id", checkAuth, multer({storage:storage}).single('image'), (req,res, next)=>{
-        //dont add new here 
-        let imagePath = req.body.imagePath;
-        if(req.file){
-            const url = req.protocol + '://' + req.get("host");
-            imagePath= url + "/images/"+ req.file.filename
-
-
-        }
-        const post = ({
-            title: req.body.title,
-            content: req.body.content,
-            imagePath: imagePath,
-            creator: req.userData.userId
-        });
-        console.log("meer the id is ", req.params.id);
-        console.log(" the update imag ", imagePath);
-        Post.updateOne({ _id:req.params.id, creator:req.userData.userId },post).then(result=>{
-            console.log(result);
-            if(result.modifiedCount > 0){
-                res.status(200).json({message:"post deleted"});
-
-            }{
-                res.status(401).json({message:"not authorized user"})
-            }
-        }).catch(err=>{
-            console.log("error in update",err);
-        })
-    
-    });
+router.put("/:id", checkAuth, multer({storage:storage}).single('image'), postController.updatePost);
 
     module.exports = router;

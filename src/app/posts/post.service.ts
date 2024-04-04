@@ -101,6 +101,8 @@ export class PostService {
         postCount: transformedPostData.maxPosts
       });
 
+    },error=>{
+      console.log(error.message);
     });
   }
 

@@ -69,7 +69,7 @@ export class PostCreateComponent implements OnInit {
   onAddPost(){
     if(this.mode==="edit"){
       this.postSer.updatePost( this.postId,this.form.value.title,this.form.value.content, this.form.value.image).subscribe((responseData)=>{
-        
+        console.log("succesffully coming to here");
         console.log(responseData.message);
         this.form.reset();
       this.router.navigate(["/"]);

@@ -34,6 +34,8 @@ export class PostListComponent implements OnInit, OnDestroy{
       this.posts=postData.posts;
       this.totalposts = postData.postCount;
 
+    },error=>{
+      console.log("we are getting error in this subscribe!!");
     });
     this.userAuthenticated = this.authSer.getAuth();
     this.userId = this.authSer.getUserId();
@@ -60,6 +62,8 @@ export class PostListComponent implements OnInit, OnDestroy{
     this.isLoading=true;
     this.postSer.deletePost(postid).subscribe(()=>{
       this.postSer.getPosts(this.pageSize, this.currentPage);
+    },error=>{
+      this.isLoading=false;//for error case
     })
   }
 
