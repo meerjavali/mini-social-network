@@ -6,10 +6,10 @@
             <span><a mat-raised-button routerLink="/create" routerLinkActive="mat-accent" [routerLinkActiveOptions]="{exact:true}">New Post</a></span>
         </li>
         <li *ngIf="!userAuthenticated">
-            <span><a mat-raised-button routerLink="/login" routerLinkActive="mat-accent" [routerLinkActiveOptions]="{exact:true}">Login</a></span>
+            <span><a mat-raised-button routerLink="auth/login" routerLinkActive="mat-accent" [routerLinkActiveOptions]="{exact:true}">Login</a></span>
         </li>
         <li *ngIf="!userAuthenticated">
-            <span><a mat-raised-button routerLink="/signUp" routerLinkActive="mat-accent" [routerLinkActiveOptions]="{exact:true}">Sign Up</a></span>
+            <span><a mat-raised-button routerLink="auth/signUp" routerLinkActive="mat-accent" [routerLinkActiveOptions]="{exact:true}">Sign Up</a></span>
         </li>
         <li *ngIf="userAuthenticated">
             <button mat-raised-button (click)="logout()">Logout</button>

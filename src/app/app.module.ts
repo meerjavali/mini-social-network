@@ -30,7 +30,6 @@ import { PostModule } from './posts/post.module';
     PostModule,
     AuthModule,
     AngularMaterialModule// instead of all the material modules we can use only one angular material module
-    
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
