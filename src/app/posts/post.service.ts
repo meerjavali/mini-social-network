@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { Post } from './post.model';
 import { Subject, map } from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-
+import { environment } from 'src/environments/environment';
+const Backend_Url= environment.apiUrl+'/posts/';
 @Injectable({
   providedIn: 'root'
 })
 export class PostService {
-
+  
   constructor(private http:HttpClient) { }
   private posts:Post[]=[];
   private postsUpdated = new Subject<{posts: Post[], postCount:number}>();
@@ -27,7 +28,7 @@ export class PostService {
     postData.append('image', image,title);
     
     
-   return this.http.post<{message:string, post:Post}>("http://localhost:3000/api/posts", postData);
+   return this.http.post<{message:string, post:Post}>(Backend_Url, postData);
     // .subscribe((responseData)=>{
     //  console.log(responseData.message);
 
@@ -62,7 +63,7 @@ export class PostService {
       }
 
     }
-    return this.http.put<{message:string}>("http://localhost:3000/api/posts/"+id, postData);
+    return this.http.put<{message:string}>(Backend_Url+id, postData);
     
 
   }
@@ -70,7 +71,7 @@ export class PostService {
     //we will get the post from mongo db not from local 
    //return {...this.posts.find(p=> p.id == postId)};
  console.log("check meer in get post");
-   return this.http.get<{_id:string, title:string, content:string, imagePath:string, creator: string}>("http://localhost:3000/api/posts/"+postId);
+   return this.http.get<{_id:string, title:string, content:string, imagePath:string, creator: string}>(Backend_Url+postId);
 
   }
   getPosts(pageSize:number , page:number){
@@ -108,7 +109,7 @@ export class PostService {
 
   deletePost(id:string){
    // console.log(id);
-   return this.http.delete("http://localhost:3000/api/posts/"+id);
+   return this.http.delete(Backend_Url+id);
     // .subscribe(()=>{
     //   //console.log("post successfully deleted!");
     //   const updatedPosts = this.posts.filter(post=>{
